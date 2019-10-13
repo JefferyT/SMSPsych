@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "undertheradar",
+  "private_key_id": "c390bfc737392179149ad6fbc60a1900fd82e2a7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC9hnTP+9BXzTdW\nAzHTIwGKgm56H7/pcTuZQ3QMiOx8AoLvePNzR2cFbTopO0Jy2b//JlRnORostzLy\nrkdXjTk+MgTD7PuZINhN13rOPuN851Z1Zaq6TDnfLMtxHLmouyuRSW0UQMSUp3zc\nABUZGA7hvxaIV+ki8bq6dkRCs1x0/b3bMRSGaVLRIn8JH7ME30LWYkHdv3ENV9li\nliCGn9FHW/e46rKUMJW+e2SsGRoo2CQvn+ddbTMJ+tsaBydi4Vw4Bd6IxRuyqUEN\ngdkYfIGRwFO5FvUnP/qRrxFYkHCaPtDJ+SzDTekOFefa3XAk1EXTDXIcNw5SZIkl\nFKwzfnkPAgMBAAECggEAXfPwJ4StOUGF25FU21agtnHHY6omoIqeIXHDb01Xcnhq\nQV3DzhOI+jM2IGd8nuPcXpe5QryXgbBFxPFpc3kSdgckvp3V8gjKwff+rIyXiH1E\nKol+U8Fi9QRHTCkRzpgO1oTAWshqy0imSIeP7fMzuWxZtrhh3g1YZIQpfaldva6L\nkh1i1Pjs5Fd2S6GfU2xAP8PhcjkZJJTns3wXlJpxFnn05ER5g4niyPH8Lkwepepj\n/OtXNaqATsjE1r1sEmV5TlI2I882qolgvqgu6s1jsgPefVe76cWcGq1FuBJH3sfq\n0xxIRFn3MsWcM0GhsiLwod//36Bg/h6+lIRL1W7SIQKBgQDnFeHeoUhraTYuBIwe\n0nQneZdUyJ2nVWsV6vwxJSbWBhsSvEIqpf6D33AMAmHun08e6jG8BKiCdIJOhDU6\nDgie6dtzN04hty2Ah2lyXey1XDdJrrNwLAJH2Uv42HW/1vDjjKT+VGkjh6OF7eQO\nZ0Vix5Jb7RJAvnlyXqVjLnHg4QKBgQDR9Xt8rvwpcpjqodIZzhLXSBl7MTwQXNK9\nEtxfUoRHiv/WMObggZUaeSpYGOpiem73kuatOlzf8lIkeXd+PJ/BeKwzyivX+Lef\nslgq0cXeSDClA1y6pGcIOYVRb732Zj0iXESGfekY3vcNrkjUUTYHemgKGH7X85J7\n5bjZ9RNn7wKBgAI9MQoSL/xycYbynlTyHxP+1puIshZb+oSk2Tq0rHKobny4/D8j\niprGgHRtVXuVaZPYGxFCTkutS1HtcAKW/jhj9a9hGs2y06sKJNhp1pBPS23YVn7A\nvmjpzxWjK0jnkT/zLeoU8UvZ1ZjHnE0TbRWu71kaq/GaptyX1Cxo18uhAoGAa3Xw\ncT2ClJgxyg1u4oRFwmgFmrb1Xg6UUe+AWU17pL5w+SjoUkogjX8sfBCsjiDKAO7w\nIAN6G6kD/+UnkrXmsnhX8t3sGMsU+KioVaouUvmx5BNXd7PDhEMkiCzgFmf3rEl7\nTTbOgktEOX1Vi03RkHxHGbu12EOzWrSWKwAzoYMCgYAyWOsx+PZzcgSBW8D5sGd2\nynEeG2SvFY/L3wgA8lKWDu/K9zYAl5A19QvrEJAFJ38rnxHe5sCmfLNjAESxIrBo\nmSNan+i66ojcH+g6g/v/jyhCAVTSAv+Pvdz9FN0EIIkNd5RllXfQ3LqWIlz5vsOl\nf6abmwGSxQAoA1kkd89dGg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "findtopicsandsentiment@undertheradar.iam.gserviceaccount.com",
+  "client_id": "107304234540156582649",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/findtopicsandsentiment%40undertheradar.iam.gserviceaccount.com"
+}
