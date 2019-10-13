@@ -3,7 +3,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from werkzeug.urls import url_parse
-from app.forms import SimulationForm
+from app.forms import LoginForm
 from app.engines import *
 
 # Home Page
