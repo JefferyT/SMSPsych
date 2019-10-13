@@ -12,15 +12,10 @@ from app.engines import *
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    form = SimulationForm()
+    form = LoginForm()
     if form.validate_on_submit():
-        try:
-            output = AP64350.sim(form.data)
-            flash('Simulation Ran!')
-            return render_template('index.html', form=form, simulated=True, simmed=output)
-        except:
-            flash('Calculation Error, Try again.')
-    return render_template('index.html', form=form, simulated=False)
+        return render_template('chat.html')
+    return render_template('index.html', form=form)
 
 # Shows the user's saved designs
 @app.route('/designs')

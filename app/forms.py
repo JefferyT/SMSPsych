@@ -1,7 +1,7 @@
 # Stores forms where user submits information to server
 
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, SelectField
+from wtforms import SubmitField, SelectField, IntegerField
 from wtforms import DecimalField
 from wtforms.validators import DataRequired, ValidationError
 from app.parts import part_dict
@@ -37,3 +37,7 @@ class SimulationForm(FlaskForm):
     C5_selected = DecimalField('C5 Selected Values', validators=[DataRequired()])
     C6_selected = DecimalField('C6 Selected Values', validators=[DataRequired()])
     submit = SubmitField('Calculate')
+
+class LoginForm(FlaskForm):
+    phone_number = IntegerField('Phone Number', validators=[DataRequired()])
+    submit = SubmitField('Enter')
