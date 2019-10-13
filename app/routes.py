@@ -14,25 +14,10 @@ from app.engines import *
 def index():
     form = LoginForm()
     if form.validate_on_submit():
-        return render_template('chat.html')
+        return redirect(url_for('chat'))
     return render_template('index.html', form=form)
 
 # Shows the user's saved designs
-@app.route('/designs')
-def designs():
-    return render_template('designs.html', title='My Designs') 
-                         
-# Displays power loss graph
-@app.route('/_power_loss.html')
-def _power_loss():
-    return render_template('_power_loss.html')
-
-# Displays efficiency summary graph
-@app.route('/_efficiency_summary.html')
-def _efficiency_summary():
-    return render_template('_efficiency_summary.html')
-
-# Displays compensation graphs
-@app.route('/_compensation.html')
-def _compensation():
-    return render_template('_compensation.html')
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')  
