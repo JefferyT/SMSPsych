@@ -13,7 +13,6 @@ class server:
     def __init__(self):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'UnderTheRadar-c390bfc73739.json'
         text = 'The turtle is cute and the rabbit is ugly'
-        document = types.Document(content=text, type=enums.Document.Type.PLAIN_TEXT, language="en")
         client = language.LanguageServiceClient()
         clientML = automl.TablesClient(project='undertheradar', region='us-central1')
 
@@ -22,7 +21,7 @@ class server:
     # 0 - sentiment value
     # 1-3 - top three topics, if there are not enough topics it will fill with NULL
     def sentimentValue(self, client, t):
-        document.content = t
+        document = types.Document(content=t, type=enums.Document.Type.PLAIN_TEXT, language="en")
         score = client.analyze_sentiment(document).document_sentiment.score
         text = list()
         text.append(score)
