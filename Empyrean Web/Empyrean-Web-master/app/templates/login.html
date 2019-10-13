@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block extrastyles %}
+    <link type="text/css" rel="stylesheet"
+        href="{{ url_for('static', filename='login.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1>Sign In</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+            {% for error in form.username.errors %}
+            <span style="color: red;" class="error">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}</br>
+            {{ form.password(size=32) }}
+            {% for error in form.username.errors %}
+            <span style="color: red;" class="error">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p> New User? <span style="text-decoration: underline;">
+            <a href="{{ url_for('register')}}" id="whitelink">Click to Register!</a></p>
+        </span>
+    <p>
+        Forgot Your Password?
+        <span style="text-decoration: underline;">
+            <a href="{{ url_for('reset_password_request')}}" id="whitelink">Click to Reset It</a>
+        </span>
+    </p>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+body{
+    background-color: #005595;
+    margin: 0px 0px 0px 0px;
+}
+.breaker{
+    margin: 0px 0px 0px 0px;
+    border-color: black;
+    background-color: black;
+    height: 5px;
+}
+.header{
+    padding: 10px 10px 10px 10px;
+    background-color: white;
+}
+.true-body{
+    padding: 10px 10px 10px 10px;
+    color: white;
+}

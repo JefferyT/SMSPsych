@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block extrastyles %}
+    <link type="text/css" rel="stylesheet"
+        href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+{% block content %}
+<h1>Welcome to Diodes Sim</h1>
+<img src="{{ url_for('static', filename='images/circuits.png') }}">
+    <h3>Power Loss Calculation</h3>
+    
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <table>
+            <tr>
+                <td>{{ form.part_number.label }}</td>
+                <td>
+                    {{ form.part_number}}
+                    {% for error in form.part_number.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{% if simmed is defined and simmed.on_time < 80 %} 
+                    Minimum On-Time Too Low. <br> Reduce Operating Frequenecy!
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{ form.switching_frequency.label }}</td>
+                <td>
+                    {{ form.switching_frequency(size=3) }}
+                    {% for error in form.switching_frequency.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>kHz</td>
+                <td></td>
+                <td>On Time</td>
+                <td>
+                    {% if simmed is defined%}
+                    {{simmed.on_time}}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>ns</td>
+            </tr>
+            <tr>
+                <td>{{ form.input_voltage.label }}</td>
+                <td>
+                    {{ form.input_voltage(size=3) }}
+                    {% for error in form.input_voltage.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>V</td>
+                <td></td>
+                <td>Duty Cycle</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.duty_cycle }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{ form.output_voltage.label }}</td>
+                <td>
+                    {{ form.output_voltage(size=3) }}
+                    {% for error in form.output_voltage.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>V</td>
+                <td></td>
+                <td>Effective Output Resistance</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.effective_output_resistance }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>Ohm</td>
+            </tr>
+            <tr>
+                <td>{{ form.output_current.label }}</td>
+                <td>
+                    {{ form.output_current(size=3) }}
+                    {% for error in form.output_current.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>A</td>
+                <td></td>
+                <td colspan=3></td>
+            </tr>
+            <tr>
+                <td colspan=3></td>
+                <td></td>
+                <td>Iupper,rms</td>
+                <td>
+                    {% if simmed is defined%}
+                    {{simmed.upper_rms }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td colspan=3 class="underlined">OUTPUT INDUCTOR</td>
+                <td></td>
+                <td>Ilower,rms</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.lower_rms }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>{{ form.ripple_ratio.label }}</td>
+                <td>
+                    {{ form.ripple_ratio(size=3) }}
+                    {% for error in form.ripple_ratio.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>%</td>
+                <td></td>
+                <td colspan=3></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td>Recommended Inductor</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.recommended_inductor }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>uH</td>
+                <td></td>
+                <td>Current Ripple</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.current_ripple }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>AP-p</td>
+            </tr>
+            <tr>
+                <td>{{ form.output_inductor.label }}</td>
+                <td>
+                    {{ form.output_inductor(size=3) }}
+                    {% for error in form.output_inductor.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>uH</td>
+                <td></td>
+                <td>Output Voltage Ripple</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.output_voltage_ripple }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>mVp-p</td>
+            </tr>
+            <tr>
+                <td>{{ form.dcr.label }}</td>
+                <td>
+                    {{ form.dcr(size=3) }}
+                    {% for error in form.dcr.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>mOhm</td>
+                <td></td>
+                <td colspan=3>N/A</td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td colspan=3 class="underlined">OUTPUT CAPACITOR</td>
+                <td></td>
+                <td colspan=3 class="underlined">Program UVLO:</td>
+            </tr>
+            <tr>
+                <td>{{ form.num_capacitors.label }}</td>
+                <td>
+                    {{ form.num_capacitors(size=3) }}
+                    {% for error in form.num_capacitors.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{ form.v_on.label}}</td>
+                <td>
+                    {{ form.v_on(size=3) }}
+                    {% for error in form.v_on.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>V</td>
+            </tr>
+            <tr>
+                <td>{{ form.capacitance_each.label }}</td>
+                <td>
+                    {{ form.capacitance_each(size=3) }}
+                    {% for error in form.capacitance_each.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>uF</td>
+                <td></td>
+                <td>{{ form.v_off.label}}</td>
+                <td>
+                    {{ form.v_off(size=3) }}
+                    {% for error in form.v_off.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>V</td>
+            </tr>
+            <tr>
+                <td>{{ form.esr_each.label }}</td>
+                <td>{{ form.esr_each(size=3) }}
+                    {% for error in form.esr_each.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>mOhm</td>
+                <td></td>
+                <td colspan=3></td>
+            </tr>
+            <tr>
+                <td colspan=3></td>
+                <td></td>
+                <td>R5</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.R5 }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>kOhm</td>
+            </tr>
+            <tr>
+                <td colspan=3 class="underlined">UPPER MOSFET</td>
+                <td></td>
+                <td>R6</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.R6 }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>kOh</td>
+            </tr>
+            <tr>
+                <td>Rds,on</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.rds_on_u }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>mOhm</td>
+                <td></td>
+                <td>RT</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.RT }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>kOhm</td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td colspan=3 class="underlined">LOWER MOSFET</td>
+                <td></td>
+                <td colspan3></td>
+            </tr>
+            <tr>
+                <td>Rds,on</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.rds_on_l }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>mOhm</td>
+                <td></td>
+                <td>{{ form.thermal_resistance.label }}</td>
+                <td>
+                    {{ form.thermal_resistance(size=3) }}
+                    {% for error in form.thermal_resistance.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>&deg; C/Watt</td>
+            </tr>
+            <tr>
+                <td colspan=3></td>
+                <td></td>
+                <td>{{ form.ambient_temperature.label }}</td>
+                <td>
+                    {{ form.ambient_temperature(size=3) }}
+                    {% for error in form.ambient_temperature.errors %}
+                    [{{ error }}]
+                    {% endfor %}
+                </td>
+                <td>&deg; C</td>
+            </tr>
+            <tr>
+                <td class="underlined">Total Loss</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.total_loss }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>Watts</td>
+                <td></td>
+                <td>Junction Temperature, T_j</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.junction_temperature }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>&deg; C</td>
+            </tr>
+            <tr>
+                <td class="underlined">Efficiency</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.efficiency }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>%</td>
+                <td></td>
+                <td>Power Dissipation in IC</td>
+                <td>
+                    {% if simmed is defined %}
+                    {{ simmed.power_dissipation }}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>W</td>
+            </tr>
+        </table>
+    
+    <div class="breakerw"></div>
+    <h3>PWM Efficiency Summary</h3>
+    <div class="breakerw"></div>
+    <table>
+        <tr>
+            <td>{{ form.min_current.label }}</td>
+            <td>
+                {{ form.min_current(size=3) }}
+                {% for error in form.min_current.errors %}
+                [{{ error }}]
+                {% endfor %}
+            </td>
+            <td>A</td>
+            <td><pre>                                          </pre></td>
+            <td>DCM-CCM Boundary</td>
+            <td><pre>       </pre></td>
+            <td>
+                {% if simmed is defined %}
+                {{ simmed.dcm_ccm_boundary }}
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>A</td>
+        </tr>
+        <tr>
+            <td>{{ form.max_current.label }}</td>
+            <td>
+                {{ form.max_current(size=3) }}
+                {% for error in form.max_current.errors %}
+                [{{ error }}]
+                {% endfor %}
+            </td>
+            <td>A</td>
+        </tr>
+    </table>
+    <div class="breakerw"></div>
+
+    <h3>Compensator Design - Type 2</h3>
+    <div id="top-left">
+    <table>
+    <tr><td colspan=5 style="text-align:center"><b>Transfer Function</b></td></tr>
+    <tr><td colspan=5 style="text-align:center">
+        <img src="{{ url_for('static', filename='images/latex.png') }}"></td></tr>
+    <tr>
+        <td><pre>   </pre></td>
+        <td>&#969;o</td>
+        <td>{% if simmed is defined %}
+            {{ simmed.omega_o }}
+            {% else %}
+            N/A
+            {% endif %}
+        <td>
+        <td>Hz</td>
+        <td><pre>   </pre></td>
+    </tr>
+    <tr>
+        <td><pre>   </pre></td>
+        <td>Fesr</td>
+        <td>{% if simmed is defined %}
+            {{ simmed.fesr }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+        <td><pre>   </pre></td>
+    </tr>
+    <tr>
+        <td><pre>   </pre></td>
+        <td>Fz</td>
+        <td>{% if simmed is defined %}
+            {{ simmed.fz}}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+        <td><pre>   </pre></td>
+    </tr>
+    <tr>
+        <td><pre>   </pre></td>
+        <td>Q</td>
+        <td>{% if simmed is defined %}
+            {{ simmed.q }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td><pre>   </pre></td>
+    </tr>
+    <tr>
+        <td><pre>   </pre></td>
+        <td>Fs</td>
+        <td>{% if simmed is defined %}
+        {{ simmed.fs }}
+        {% else %}
+        N/A
+        {% endif %}
+        </td>
+        <td>Hz</td>
+        <td><pre>   </pre></td>
+    </tr>
+    </table>
+
+    <table>
+    <tr><td colspan=6 style="text-align:center"><b>Resistive Divider</b></td></tr>
+    <tr>
+        <td>User Selects R1</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.user_selects_R1 }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Ohm</td>
+        <td><pre>       </pre></td>
+        <td><pre>   </pre></td>
+        <td>Ohm</td>
+    </tr>
+    <tr>
+        <td>{{ form.user_selects_R2.label }}</td>
+        <td>
+            {{ form.user_selects_R2(size=3) }}
+            {% for error in form.user_selects_R2.errors %}
+            [{{ error }}]
+            {% endfor %}
+        </td>
+        <td>Ohm</td>
+        <td><pre>       </pre></td>
+        <td><pre>   </pre></td>
+        <td><pre>   </pre></td>
+    </tr>
+    <tr>
+        <td>{{ form.user_selects_C4.label }}</td>
+        <td>
+            {{ form.user_selects_C4(size=3) }}
+            {% for error in form.user_selects_C4.errors %}
+            [{{ error }}]
+            {% endfor %}
+        </td>
+        <td>F</td>
+    <tr>
+    </table>
+
+    <div class="breakerw"></div>
+    <div class="breakerw"></div>
+    <div class="breakerw"></div>
+    {{ form.submit }}
+    
+    </div>
+
+    <div class="breakerw"></div>
+
+    <div id="top-right">
+    <table>
+    <tr><td colspan=5 style="text-align:center"><b>Controller</b></td></tr>
+    <tr>
+        <td colspan=3>Tran-Resistance, R_T</td>
+        <td>0.089</td>
+        <td>Ohm</td>
+    </tr>
+    <tr>
+        <td colspan=3>Slope Compensation, S_w (without F_s)</td>
+        <td>1.87</td>
+        <td>V</td>
+    </tr>
+    <tr>
+        <td colspan=2>Current Sense, S_n<td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.current_sense }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>A/s</td>
+    </tr>
+    <tr>
+        <td colspan=3>Total Control Slope, m_c</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.total_control_slope }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>A/s</td>
+    </tr>
+    <tr>
+        <td colspan=3>Error Amp Output Resistance, Roerr</td>
+        <td>
+            1.00E+07
+        </td>
+        <td>ohm</td>
+    </tr>
+    <tr>
+        <td colspan=3>Feedback Voltage, VFB</td>
+        <td>8.00E-01</td>
+        <td>V</td>
+    </tr>
+    <tr>
+        <td colspan=3>Transconductance, gm</td>
+        <td>1.50E-04</td>
+        <td>S</td>
+    </tr>
+    <tr>
+        <td colspan=3 style="text-align:center">Calculated Values</td>
+        <td colspan=2 style="text-align:center">Selected Values</td>
+    </tr>
+    <tr>
+        <td>Desired Fc</td>
+        <td>10%</td>
+        <td>of Fs=Fc</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.desired_fc }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+    </tr>
+    <tr>
+        <td>R5</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.R5_c }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>ohm</td>
+        <td>
+            {{ form.R5_selected(size=3)}}
+            {% for error in form.R5_selected.errors %}
+            [{{ error }}]
+            {% endfor %}
+        </td>
+        <td>ohm</td>
+    </tr>
+    <tr>
+        <td>C5</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.C5_c }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>F</td>
+        <td>
+            {{ form.C5_selected(size=3)}}
+            {% for error in form.C5_selected.errors %}
+            [{{ error }}]
+            {% endfor %}
+        </td>
+        <td>F</td>
+    </tr>
+    <tr>
+        <td>C6</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.C6_c }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>F</td>
+        <td>
+            {{ form.C6_selected(size=3)}}
+            {% for error in form.C6_selected.errors %}
+            [{{ error }}]
+            {% endfor %}
+        </td>
+        <td>F</td>
+    </tr>
+    <tr>
+        <td>Fz1</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.Fz1_c }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.Fz1_s }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+    </tr>
+    <tr>
+        <td>Fp2</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.Fp2_c }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.Fp2_s}}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>Hz</td>
+    </tr>
+    <tr>
+        <td colspan=2></td>
+        <td>Bandwith</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.bandwith }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>kHz</td>
+    </tr>
+    <tr>
+        <td colspan=2></td>
+        <td>Phase margin</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.phase_margin }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>degree</td>
+    </tr>
+    <tr>
+        <td colspan=2></td>
+        <td>Gain margin</td>
+        <td>
+            {% if simmed is defined %}
+            {{ simmed.gain_margin }}
+            {% else %}
+            N/A
+            {% endif %}
+        </td>
+        <td>dB</td>
+    </tr>
+    </table>
+    </div>
+    </form>
+    
+    {% if simulated %}
+        <embed
+            src="_power_loss.html"
+            height="450"
+            id="output-frame">
+        </embed>
+        <p id="external-output">
+        Output not appearing? Click <a href={{ url_for("_power_loss")}}  target="_blank" id="white">here</a>
+        </p>
+    {% endif %}
+{% endblock %}
