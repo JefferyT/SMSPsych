@@ -1,0 +1,39 @@
+body{
+    background-color: #005595;
+    margin: 0px 0px 0px 0px
+}
+.left{
+    color: #005595;
+    float: left;
+}
+.right{
+    color: #005595;
+    float: right;
+}
+a{	
+    color: #005595;
+    text-decoration: none;
+}
+
+a.active{	
+    font-weight: bold; !important 
+}
+.breaker{
+    margin: 0px 0px 0px 0px;
+    border-color: black;
+    background-color: black;
+    height: 5px;
+}
+hr{
+    color: black;
+    border-color: black;
+    background-color: black;
+    height: 5px;
+    border: none;
+    padding: none;
+    margin: none;
+}
+.header{
+    padding: 10px 10px 10px 10px;
+    background-color: white; 
+}

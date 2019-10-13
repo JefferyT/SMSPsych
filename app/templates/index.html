@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='index.css') }}">
+
+<h1>SMSPsych</h1>
+
+Please enter Phone Number:    
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.phone_number(size=12)}}
+    </p>
+        <p> {{ form.submit() }}</p>
+</form>
