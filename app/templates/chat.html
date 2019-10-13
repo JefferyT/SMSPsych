@@ -9,5 +9,10 @@
 </form>
 </p>
 <p id="analysis">
-
+    {% for i in issues %}
+        {% for key, value in i.items() %}
+            <p>Key: {{key}}</p>
+            <p>Value: {{value}}</p>
+        {% endfor %}
+    {% endfor %}
 </p>
